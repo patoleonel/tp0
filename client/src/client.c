@@ -92,15 +92,25 @@ t_config* iniciar_config(void)
 void leer_consola(t_log* logger)
 {
 	char* leido;
-
+	
+	
+	while(leido){
 	// La primera te la dejo de yapa
 	leido = readline("> ");
 
+	if(!leido){
+		break;
+	}
+
 	// El resto, las vamos leyendo y logueando hasta recibir un string vacío
+	log_info(logger,"Escribiste esto %s",leido);
 
 
 	// ¡No te olvides de liberar las lineas antes de regresar!
+	free(leido);
 
+	}
+	
 }
 
 void paquete(int conexion)
