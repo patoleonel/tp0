@@ -24,12 +24,6 @@ int main(void)
 
 	config = iniciar_config();
 
-	if (config == NULL) {
-    log_info(logger,"¡No se pudo crear el config!");
-    // Terminemos el programa
-	abort();
-}
-
 
 ip = config_get_string_value(config,"IP");
 valor = config_get_string_value(config,"CLAVE");
@@ -43,14 +37,15 @@ puerto = config_get_string_value(config,"PUERTO");
 
 	// Loggeamos el valor de config
 
+	log_info(logger,"el IP leido del config es: %s",ip);
+    log_info(logger,"la Clave leido del config es: %s",valor);
+    log_info(logger,"el Puerto leido del config es: %s",puerto);
 
 	/* ---------------- LEER DE CONSOLA ---------------- */
 
 	leer_consola(logger);
 
-	log_info(logger,"el IP leido del config es: %s",ip);
-    log_info(logger,"la Clave leido del config es: %s",valor);
-    log_info(logger,"el Puerto leido del config es: %s",puerto);
+	
 
 	/*---------------------------------------------------PARTE 3-------------------------------------------------------------*/
 
@@ -74,12 +69,22 @@ t_log* iniciar_logger(void)
 {
 	t_log* nuevo_logger = log_create("tp0.log","PrimerLog",true,LOG_LEVEL_INFO);
 
+	if (nuevo_logger == NULL){
+		printf("No se pudo crear el Logger!");
+		abort();
+	}
+
 	return nuevo_logger;
 }
 
 t_config* iniciar_config(void)
 {
 	t_config* nuevo_config = config_create("cliente.config");
+
+	if (nuevo_config == NULL){
+		printf("No se pudo crear el config!");
+		abort();
+	}
 
 	return nuevo_config;
 }
