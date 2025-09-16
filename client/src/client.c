@@ -19,33 +19,24 @@ int main(void)
 
 	// Usando el logger creado previamente
 	// Escribi: "Hola! Soy un log"
-	log_info(logger,"Soy un Log");
+	log_info(logger,"Soy un Log");//Muestra por consola y Loggea
 
 
 	/* ---------------- ARCHIVOS DE CONFIGURACION ---------------- */
 
 	config = iniciar_config();
 
-		if (config == NULL) {
-			log_info(logger,"¡No se pudo crear el config!");
-			// Terminemos el programa
-			abort();
-		}
-
-
-
-ip = config_get_string_value(config,"IP");
-valor = config_get_string_value(config,"CLAVE");
-puerto = config_get_string_value(config,"PUERTO");
-
-    		
-
 
 	// Usando el config creado previamente, leemos los valores del config y los 
 	// dejamos en las variables 'ip', 'puerto' y 'valor'
 
-	// Loggeamos el valor de config
-	log_info(logger,"el IP leido del config es: %s",ip);
+ip = config_get_string_value(config,"IP");
+valor = config_get_string_value(config,"CLAVE");
+puerto = config_get_string_value(config,"PUERTO");
+	
+	// Loggeamos el valor de config (usando log_info pa mostrar x consola y loggear)
+	
+	log_info(logger,"el IP leido del config es: %s",ip); 
     log_info(logger,"la Clave leido del config es: %s",valor);
     log_info(logger,"el Puerto leido del config es: %s",puerto);
 
@@ -65,7 +56,7 @@ puerto = config_get_string_value(config,"PUERTO");
 	// Enviamos al servidor el valor de CLAVE como mensaje
 
 	// Armamos y enviamos el paquete
-	paquete(conexion);
+	//paquete(conexion);
 
 	terminar_programa(conexion, logger, config);
 
@@ -84,6 +75,11 @@ t_config* iniciar_config(void)
 {
 	t_config* nuevo_config = config_create("cliente.config");
 
+		if (nuevo_config == NULL) {
+			printf("¡No se pudo crear el config!");
+			// Terminemos el programa
+			abort();
+		}
 	return nuevo_config;
 }
 
@@ -92,13 +88,26 @@ void leer_consola(t_log* logger)
 	char* leido;
 
 	// La primera te la dejo de yapa
-	leido = readline("> ");
 
 	// El resto, las vamos leyendo y logueando hasta recibir un string vacío
 
-	
+	while(1){
 
+		leido =  readline("> ");
 
+		if(!leido){
+			break; //Como es NULL no necesita ser liberado aca
+		}else if(strcmp(leido,"")==0){
+			free(leido); //aca si, porque tiene un caracter nulo, pero tiene
+			break;
+		}else{
+
+			log_info(logger,"MMM>>: %s", leido);
+
+			free(leido); //aca libero lo que haya de texto
+		}
+
+	}
 	// ¡No te olvides de liberar las lineas antes de regresar!
 
 }
